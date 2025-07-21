@@ -18,9 +18,11 @@ import EnrolledCourses from "./components/core/Dashboard/EnrolledCourses";
 import Error from "./pages/Error"
 import Cart from "./components/core/Dashboard/cart";
 import { ACCOUNT_TYPE } from "./utils/constants";
+import { useSelector } from "react-redux";
 
 
 function App() {
+  const {user} = useSelector((state) => state.profile)
   return (
       <div className="w-screen min-h-screen bg-richblack-900 font-inter flex flex-col">
 
@@ -99,8 +101,7 @@ function App() {
               <Dashboard/>
             </ProtectedRoute>
         
-        }
-        >
+        } >
           <Route path="dashboard/my-profile" element={<MyProfile/>}/>
           <Route path="dashboard/settings" element={<Settings/>}/>
 
