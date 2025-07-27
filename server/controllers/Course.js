@@ -18,16 +18,16 @@ exports.createCourse = async (req, res) => {
       courseDescription,
       whatYouWillLearn,
       price,
-      // tag: _tag,
+      tag: _tag,
       category,
       status,
       instructions: _instructions,
     } = req.body
     // Get thumbnail image from request files
-    // const thumbnail = req.files.thumbnailImage
+    const thumbnail = req.files.thumbnailImage;
 
     // Convert the tag and instructions from stringified Array to Array
-    // const tag = JSON.parse(_tag)
+    const tag = JSON.parse(_tag)
     const instructions = JSON.parse(_instructions)
 
     // console.log("tag", tag)
@@ -39,8 +39,8 @@ exports.createCourse = async (req, res) => {
       !courseDescription ||
       !whatYouWillLearn ||
       !price ||
-      // !tag.length ||
-      // !thumbnail ||
+      !tag.length ||
+      !thumbnail ||
       !category ||
       !instructions.length
     ) {
@@ -72,12 +72,17 @@ exports.createCourse = async (req, res) => {
         message: "Category Details Not Found",
       })
     }
+
+    console.log("Befor uploading image ")
     // Upload the Thumbnail to Cloudinary
-    // const thumbnailImage = await uploadImageToCloudinary(
-    //   thumbnail,
-    //   process.env.FOLDER_NAME
-    // )
-    // console.log(thumbnailImage)
+    const thumbnailImage = await uploadImageToCloudinary(
+      thumbnail,
+      process.env.FOLDER_NAME
+    )
+    console.log(thumbnailImage)
+    console.log("After uploading image ")
+
+
     // Create a new course with the given details
     const newCourse = await Course.create({
       courseName,
@@ -85,9 +90,9 @@ exports.createCourse = async (req, res) => {
       instructor: instructorDetails._id,
       whatYouWillLearn: whatYouWillLearn,
       price,
-      // tag,
+      tag,
       category: categoryDetails._id,
-      // thumbnail: thumbnailImage.secure_url,
+      thumbnail: thumbnailImage.secure_url,
       status: status,
       instructions,
     })
@@ -131,6 +136,8 @@ exports.createCourse = async (req, res) => {
     })
   }
 }
+
+
 // Edit Course Details
 exports.editCourse = async (req, res) => {
   try {
